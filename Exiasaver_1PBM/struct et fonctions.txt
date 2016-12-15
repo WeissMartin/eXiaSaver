@@ -1,0 +1,179 @@
+-----------------------------------------------------
+			STRUCTURES
+-----------------------------------------------------
+
+struct Sauv {
+	char termSaver[20];
+	int dateLancement[6];
+}
+-----------------------------------------------------
+struct tm date;
+-----------------------------------------------------
+
+
+-----------------------------------------------------
+			FONCTIONS
+-----------------------------------------------------
+
+int InitTime()
+{
+	time_t secondes;
+	struct tm instant;
+	time(&secondes);
+	instant=*localtime(&secondes);
+	int TimeS1 = (instant.tm_sec)/10;
+	int TimeS2 = (instant.tm_sec)-(TimeS1*10);
+	int TimeM1 = (instant.tm_min)/10;
+	int TimeM2 = (instant.tm_min)-(TimeM1*10);
+	int TimeH1 = (instant.tm_hour)/10;
+	int TimeH2 = (instant.tm_hour)-(TimeH1*10);
+
+	int Time[8];
+	Time[0] = TimeH1;
+	Time[1] = TimeH2;
+	Time[2] = 15;
+	Time[3] = TimeM1;
+	Time[4] = TimeM2;
+	Time[5] = 15;
+	Time[6] = TimeS1;
+	Time[7] = TimeS2;
+
+	int z = 0;
+	int TailleFich = 1;
+
+	//printf("Horloge --> %u%u : %u%u : %u%u\n",TimeH1 ,TimeH2,TimeM1 ,TimeM2,TimeS1 ,TimeS2);
+
+	//system("clear"); // fonction qui nettoie la console.
+
+		int y=40-((4+TailleFich*2)*3+5), x=6;
+	    	int i = 0, j = 0; // declaration de deux variable pour les boucles.
+	    	FILE* fichier = NULL; //initialisation du pointeur a NULL
+	    	char chaine[TAILLE_MAX];
+	    	int chaine2[2];
+	    	//fichier = fopen("6.pbm", "r"); // ouverture de l'image
+	     	int a,b;
+
+	for (z=0; z<8; z++)
+	{
+		switch(Time[z])
+		{
+			case 0:
+				fichier = fopen("0.pbm", "r");
+				break;
+			case 1:
+				fichier = fopen("1.pbm", "r");
+				break;
+			case 2:
+				fichier = fopen("2.pbm", "r");
+				break;
+			case 3:
+				fichier = fopen("3.pbm", "r");
+				break;
+			case 4:
+				fichier = fopen("4.pbm", "r");
+				break;
+			case 5:
+				fichier = fopen("5.pbm", "r");
+				break;
+			case 6:
+				fichier = fopen("6.pbm", "r");
+				break;
+			case 7:
+				fichier = fopen("7.pbm", "r");
+				break;
+			case 8:
+				fichier = fopen("8.pbm", "r");
+				break;
+			case 9:
+				fichier = fopen("9.pbm", "r");
+				break;
+			case 15:
+				fichier = fopen(":.pbm", "r");
+				break;
+		}
+
+	    	if (fichier != NULL) // vérification de l'ouverture du fichier
+	    	{
+			fseek(fichier, 3, SEEK_SET);
+			fscanf(fichier, "%d %d", &chaine2[0], &chaine2[1]);
+			a = chaine2[0];
+			b = chaine2[1];
+			a = (a*2)-1;
+
+			fseek(fichier, 1, SEEK_CUR);
+			for(i=0; i<b; i++) // boucle qui va parcourir les lignes
+			{
+				gotoxy(x,y);
+		    		fgets(chaine, TAILLE_MAX, fichier); // recuperation de la ligne
+		    		for(j=0;j<a;j++) // boucle qui parcourt la ligne
+		    		{
+					gotoxy(x,y);
+		        		if (chaine[j] == '0')
+		            			chaine[j] = ' '; // changement des 0 en espace
+		        		else if (chaine[j] == '1')
+		            			chaine[j] = 'X'; // changement des 1 en X
+
+					//x=x+1;
+		   		}
+				x=x+1;
+		    		printf("%s", chaine); // affichage de la ligne modifié
+
+			}
+			fclose(fichier); // fermeture du fichier
+			fichier = NULL;
+	    	}
+		x=x-5;
+		y = y+7;
+
+	}
+}
+------------------------------------------------------
+int Time[8];
+	Time[0] = TimeH1;
+	Time[1] = TimeH2;
+	Time[2] = 15;
+	Time[3] = TimeM1;
+	Time[4] = TimeM2;
+	Time[5] = 15;
+	Time[6] = TimeS1;
+	Time[7] = TimeS2;
+------------------------------------------------------
+int choixAlea() //fonction de génération de nbr aléatoire
+{
+        int mysteryNumber = 0;
+
+        srand(time(NULL));
+        mysteryNumber = (rand() % (MAX - MIN + 1)) + MIN;
+
+        return mysteryNumber;
+}
+------------------------------------------------------
+pid_t create_process(void) //création nouveau processus
+{
+        pid_t pid; //nouvelle valeur de pid
+
+        do {
+            pid = fork(); //on crée un processus tant que sa création échoue
+        } while((pid == -1) && (errno == EAGAIN));
+
+        return pid; //on retourne le pid du processus créé
+}
+------------------------------------------------------
+void printf_center (int a, const char* str) // affiche le printf au milieu.
+{
+	int i;
+	for (i = 0; i<((80-a)/2); i++)
+	{
+		putchar(' '); // boucle qui ajoute un espace pour arriver au milieu.
+	}
+	printf ("%s", str);
+}
+------------------------------------------------------
+void center_picture (int b)
+{
+	for (int i = 0; i<((24-b)/2); i++)
+{
+	putchar('\n');
+}
+}
+------------------------------------------------------
