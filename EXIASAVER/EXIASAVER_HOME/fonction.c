@@ -13,7 +13,6 @@
 #define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
 #define TAILLE_MAX 80
 #include "fonction.h" // répertoire avec toutes les fonctions
-
 /*
 Fonction permettant de générer un nombre
 aléatoire entre 1 et 5.
@@ -108,7 +107,7 @@ pid_t create_process(void) //création nouveau processus
 
         return pid; //on retourne le pid du processus créé
 }
-int InitTime()
+int InitTime(int Scale)
 {
 	time_t secondes;
 	struct tm instant;
@@ -132,13 +131,13 @@ int InitTime()
 	Time[7] = TimeS2;
 
 	int z = 0;
-	int TailleFich = 1;
+	int TailleFich = Scale;
 
 	//printf("Horloge --> %u%u : %u%u : %u%u\n",TimeH1 ,TimeH2,TimeM1 ,TimeM2,TimeS1 ,TimeS2);
 
 	//system("clear"); // fonction qui nettoie la console.
 
-		int y=40-((4+TailleFich*2)*3+5), x=6;
+		int y=40-((4+TailleFich*3)*3+5), x=6;
 	    	int i = 0, j = 0; // declaration de deux variable pour les boucles.
 	    	FILE* fichier = NULL; //initialisation du pointeur a NULL
 	    	char chaine[TAILLE_MAX];
@@ -151,109 +150,142 @@ int InitTime()
 		switch(Time[z])
 		{
 			case 0:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/0.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/0.pbm", "r");
+			  break;
 			case 1:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/1.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/1.pbm", "r");
+			  break;
 			case 2:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/2.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/2.pbm", "r");
+			  break;
 			case 3:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/3.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/3.pbm", "r");
+			  break;
 			case 4:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/4.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/4.pbm", "r");
+			  break;
 			case 5:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/5.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/5.pbm", "r");
+			  break;
 			case 6:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/6.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/6.pbm", "r");
+			  break;
 			case 7:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/7.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/7.pbm", "r");
+			  break;
 			case 8:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/8.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/8.pbm", "r");
+			  break;
 			case 9:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/9.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/9.pbm", "r");
+			  break;
 			case 15:
-				fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/:.pbm", "r");
-				break;
+			  fichier = fopen("/home/nathan/Desktop/EXIASAVER/EXIASAVER2_PBM/:.pbm", "r");
+			  break;
 		}
 
 	    	if (fichier != NULL) // vérification de l'ouverture du fichier
 	    	{
-			fseek(fichier, 3, SEEK_SET);
-			fscanf(fichier, "%d %d", &chaine2[0], &chaine2[1]);
-			a = chaine2[0]-1 + TailleFich;
-			b = chaine2[1]-2 + TailleFich*2;
-			a = (a*2)-1;
-			//printf("%d",a);
-			char P = 'X';
+				fseek(fichier, 3, SEEK_SET);
+				fscanf(fichier, "%d %d", &chaine2[0], &chaine2[1]);
+				a = chaine2[0]-1 + TailleFich;
+				b = chaine2[1]-2 + TailleFich*2;
+				a = (a*2)-1;
+				char P = 'X';
 
 
-			fseek(fichier, 1, SEEK_CUR);
+				fseek(fichier, 1, SEEK_CUR);
+				for(i=0; i<b; i++) // boucle qui va parcourir les lignes
+				{
 
-
-			for(i=0; i<b; i++) // boucle qui va parcourir les lignes
-			{
-				gotoxy(x,y);
-		    		fgets(chaine, TAILLE_MAX, fichier); // recuperation de la ligne
-
-
-
-					// Boucle pour convertir les 0 et 1 en espaces et X
-					for (j = 0; j < a; j++) {
-						if (chaine[j] == '0') {
-							chaine[j] = ' ';
-						} else if (chaine[j] == '1') {
-							chaine[j] = P;
-						}
-					}
-
-		    		for(j=0;j<a;j++) // boucle qui parcourt la ligne
-		    		{
 					gotoxy(x,y);
+			    	fgets(chaine, TAILLE_MAX, fichier); // recuperation de la ligne
 
-						if (TailleFich == 2 && Time[z] == 15)
+					for(j=0;j<a;j++)
+					{
+						if (chaine[j] == '0')
+			            			chaine[j] = ' '; // changement des 0 en espace
+			        	else if (chaine[j] == '1')
+			            			chaine[j] = 'X'; // changement des 1 en X
+			            if (chaine[j] == ' ')
+						{
+							if (chaine[j-1] == 'X' && chaine[j+1] == '1')
+							chaine[j] = 'X';
+						}
+			        }
+
+			    	for(j=0;j<a;j++) // boucle qui parcourt la ligne
+			    	{
+						gotoxy(x,y);
+			        	if (TailleFich == 2 && Time[z] == 15)
 						{
 							chaine[3] = chaine[2];
 						}
 						else if (TailleFich == 2 && Time[z] != 15)
 						{
-							chaine[6] = chaine[4];
-							chaine[5] = chaine[2];
+							if (j==0)
+							{
+								chaine[6] = chaine[4];
+								chaine[4] = chaine[2];
+								chaine[1] = chaine[2];
+								chaine[3] = chaine[1];
+								chaine[5] = chaine[3];
 
-							chaine[4] = chaine[2];
-							chaine[3] = chaine[2];
+							}
+
 						}
 
-						/*if (chaine[j] == '0')
-				    			chaine[j] = ' '; // changement des 0 en espace
-						else if (chaine[j] == '1')
-				    			chaine[j] = P; // changement des 1 en X
-						else*/ if (chaine[j] == ' ')
+						if (TailleFich == 2 && (i == 1 || i == 3))
 						{
-							if (chaine[j-1] == P && chaine[j+1] == '1')
-								chaine[j] = P;
+							gotoxy(x,y);
+							for (j = 0; j < a; j++)
+							{
+								if (chaine[j] == ' ')
+									chaine[j] = ' ';
+								else if (chaine[j] == P)
+									chaine[j] = P;
+								//printf("%s", chaine);
 
-							if (chaine[j-1] == P && chaine[j+1] == P)
-								chaine[j] = P;
+							}
+							x++;
+
+							gotoxy(x,y);
+							for (j = 0; j < a; j++)
+							{
+								if (chaine[j] == ' ')
+									chaine[j] = ' ';
+								else if (chaine[j] == P)
+									chaine[j] = P;
+							}
+
 						}
-		   		}
-				x=x+1;
-		    		printf("%s", chaine); // affichage de la ligne modifié
 
-			}
-			fclose(fichier); // fermeture du fichier
-			fichier = NULL;
+			   		}
+					x=x+1;
+			    	printf("%s", chaine); // affichage de la ligne modifié
+
+				}
+
+				fclose(fichier); // fermeture du fichier
+				fichier = NULL;
 	    	}
-		x = x-(3+TailleFich*2);
-		y = y+(5+TailleFich*2);
+	    if (TailleFich == 2)
+	    {
+	    	x = x-9 ;
+	    	y = y+9;
+
+	    }
+	    else
+	    {
+	    	x = x-5;
+			y = y+7;
+	    }
+
+
+		gotoxy(14,1);
+		printf("                 \n");
+		gotoxy(15,1);
+		printf("                 \n");
 
 	}
 }

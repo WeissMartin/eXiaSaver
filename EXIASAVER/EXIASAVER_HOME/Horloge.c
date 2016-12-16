@@ -14,11 +14,17 @@
 #define TAILLE_MAX 80
 #include "fonction.h" // répertoire avec toutes les fonctions
 
-
 int main()
 {
 
-	int RefreshT = 1;
+	int RefreshT;
+	system("clear");
+	gotoxy(10, 20);
+	printf("Entrez le temps entre 2 Actualisation : ");
+	scanf("%d", &RefreshT);
+
+	srand(time(NULL));
+	int Scale = (rand()%2) +1;
 	int ctrlc = 0;
 	int i;
 	int a = 20,b = 15,c = 3,d = 25;
@@ -28,9 +34,8 @@ int main()
 	{
 		int x = 20;
 		int y = 62;
-
-(c,d);
-		InitTime();
+		gotoxy(c,d);
+		InitTime(Scale);
 		gotoxy(a,b);
 		if (RefreshT == 1)
 		{

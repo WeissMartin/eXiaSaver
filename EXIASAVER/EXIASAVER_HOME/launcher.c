@@ -17,74 +17,68 @@
 
 int main(int argc, char *argv[])
 {
-        struct Sauv {
-            char termSaver[20];
-            int dateLancement[6];
-        };
 
-        struct Sauv sauv;
+        char* asctime (const struct tm* instant);
+
+	char recup[TAILLE_MAX][40];
+	int q = 0, compteurDyn = 0, compteurSta = 0, totalTypes = 0;
+	char testS[] = "S";
+	char testD[] = "D";
+	int affichage = 0, saisie = 0;
+        char parametre[] = "-stats";
         time_t temps;
 
+        FILE* fichier = NULL;
         struct tm date;
 
         time(&temps);
         date=*localtime(&temps);
         printf("%s\n", asctime(&date));
 
-        char *arg1[] = {"XXX", argv[1], NULL};
-        char *arg2[] = {"XXX", argv[2], NULL};
-        char *arg3[] = {"XXX", argv[3], NULL};
+        char *arguments[] = {"hello", NULL};
         int choix = 0, i = 0, status = 0;
         choix = choixAlea();
 
-        printf("running eXiaSaver ...\n");
         system("clear"); //clean la console
+
+ if (argc <= 1)
+  {
         pid_t pid = create_process();
-
-
-        /*sauv.dateLancement[0] = tm_hour;
-        sauv.dateLancement[1] = tm_min;
-        sauv.dateLancement[2] = tm_sec;
-        sauv.dateLancement[3] = tm_mday;
-        sauv.dateLancement[4] = tm_mom + 1;
-        sauv.dateLancement[5] = tm_year + 1900;*/
-
-        FILE* fichier = NULL;
-
-        fichier = fopen("historique.txt", "a"); //ouverture du fichier
-
-        if (fichier != NULL)
-        {
-            // on peut lire/écrire
-            for (i = 0 ; i <= 5 ; i ++)
-            {
-                fprintf(fichier, "%d", sauv.dateLancement[i]);
-            }
-            fprintf(fichier, "/n");
-            fclose(fichier);
-        }
-        else
-        {
-        //Fichier pas ouvert
-        printf("impossible d'ouvrir le fichier souhaite\n");
-        }
-
-
         if (choix == 1)
         {
             switch (pid)
             {
                 case -1:
-                    perror("fork");
+                    // perror("fork");
                     return EXIT_FAILURE;
                 break;
 
                 case 0:
-                    if(execv("recuperation", arg1) == -1)
+
+		        fichier = fopen("historique.txt", "a"); //ouverture du fichier
+
+		        if (fichier != NULL)
+		        {
+
+			fprintf(fichier, "%sStatique\n", asctime(&date));
+			fclose(fichier);
+		        }
+		        else
+		        {
+		        //Fichier pas ouvert
+		        printf("impossible d'ouvrir le fichier souhaite\n");
+		        }
+              /*      char* variable = malloc(512);
+                    if(getenv("Hello")==NULL){
+                      strcpy(variable,"Hello");
+                    } else
                     {
-                        perror("execv");
-                        exit(EXIT_FAILURE);
-                    }
+                      strcpy(variable, getenv("Hello"));
+                    }*/
+                    int r = nmbraleatoir();
+                    char* nmbral = malloc(512);
+                    sprintf (nmbral, "%d", r);
+                execl("statique", nmbral, (char*)NULL);
                 break;
 
                 default:
@@ -99,16 +93,27 @@ int main(int argc, char *argv[])
             switch (pid)
             {
                 case -1:
-                    perror("fork");
+                  //  perror("fork");
                     return EXIT_FAILURE;
                 break;
 
                 case 0:
-                    if(execv("Horloge", arg2) == -1)
-                    {
-                        perror("execv");
-                        exit(EXIT_FAILURE);
-                    }
+
+		        fichier = fopen("historique.txt", "a"); //ouverture du fichier
+
+		        if (fichier != NULL)
+		        {
+		        // on peut lire/écrire
+			fprintf(fichier, "%s, Dynamique\n", asctime(&date));
+			fclose(fichier);
+		        }
+		        else
+		        {
+		        //Fichier pas ouvert
+		        printf("impossible d'ouvrir le fichier souhaite\n");
+            }
+            execv("Horloge", arguments);
+
                 break;
 
                 default:
@@ -118,6 +123,7 @@ int main(int argc, char *argv[])
 
             }
         }
+    }
 
         /*if (choix == 3)
         {
@@ -142,10 +148,69 @@ int main(int argc, char *argv[])
                 break;
             }
         } */
-        else
-        {
+else {
+	int choixmenu = 0;
 
-        }
+	if (strcmp(argv[1], parametre) == 0)
+	{
+	FILE* fichier = NULL;
 
+        fichier = fopen("historique.txt", "r"); //ouverture du fichier
+
+	   	if (fichier != NULL)
+    		{
+	char chainehisto[TAILLE_MAX];
+
+	printf("quel type d'affichage désirez vous?\n1.Historique 2. Statistiques\n");
+	scanf("%d", &choixmenu);
+
+	switch (choixmenu)
+	{
+	case 1:
+          fseek(fichier, 0, SEEK_SET);
+        	while (fgets(chainehisto, TAILLE_MAX, fichier) != NULL) // On lit le fichier
+        	{
+            	printf("%s\n", chainehisto); // On affiche la chaîne
+        	}
+
+        	fclose(fichier);
+ 	break;
+	case 2:
+
+	FILE* fichier = NULL;
+
+   	fichier = fopen("historique.txt", "r");
+
+    if (fichier != NULL)
+    {
+		while (q < TAILLE_MAX)
+		{
+		fgets(recup[i][TAILLE_MAX], TAILLE_MAX, fichier); // On lit maximum TAILLE_MAX caractères du fichier, on stocke le tout dans "chaine"
+        	}
+        	fclose(fichier);
+    }
+	for (q = 0; q < TAILLE_MAX; q++)
+		{
+		if (recup[q][1] == testS)
+			{
+			compteurSta ++;
+			}
+		else if (recup[i][1] == testD)
+			{
+			compteurDyn ++;
+			}
+		}
+	totalTypes = compteurSta + compteurDyn;
+	printf("%d% de statiques\n%d% de Dynamiques\n", compteurSta/totalTypes, compteurDyn/totalTypes);
+
+		break;
+	default:
+		printf("saisie incorrecte");
+		break;
+	}
+}
+}
+}
     return 0;
+
 }
